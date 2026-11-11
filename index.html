@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bouffe</title>
+<meta name="theme-color" content="#2f5d3a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Bouffe">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<style>
+:root{
+  --bg:#f7f3ec; --card:#fff; --ink:#23261f; --muted:#6d6f66; --line:#e6e0d4;
+  --green:#2f5d3a; --green-2:#e3eee2; --red:#b3402a; --red-2:#f8e3dc; --amber:#a76a00; --amber-2:#fbeecf;
+  --blue:#2c5a8a; --blue-2:#e2ebf5; --radius:16px;
+  --safe-b: env(safe-area-inset-bottom, 0px); --safe-t: env(safe-area-inset-top, 0px);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+body{padding-top:var(--safe-t);padding-bottom:calc(76px + var(--safe-b))}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+input,select,textarea{font:inherit;color:inherit}
+h1{font-size:26px;margin:18px 16px 6px;letter-spacing:-.3px}
+h2{font-size:17px;margin:22px 16px 8px;color:var(--muted);font-weight:600}
+.sub{margin:0 16px 10px;color:var(--muted);font-size:14px}
+.card{background:var(--card);border-radius:var(--radius);margin:10px 12px;padding:14px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.row{display:flex;align-items:center;gap:10px}
+.grow{flex:1;min-width:0}
+.muted{color:var(--muted)} .small{font-size:13px}
+.ellipsis{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 16px;border-radius:12px;background:var(--green-2);color:var(--green);font-weight:600}
+.btn.primary{background:var(--green);color:#fff}
+.btn.big{width:100%;min-height:58px;font-size:18px}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+.btn.danger{background:var(--red-2);color:var(--red)}
+.btn.sm{min-height:36px;padding:0 12px;font-size:14px;border-radius:10px}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:600;background:var(--green-2);color:var(--green)}
+.pill.red{background:var(--red-2);color:var(--red)} .pill.amber{background:var(--amber-2);color:var(--amber)} .pill.blue{background:var(--blue-2);color:var(--blue)} .pill.grey{background:#eee;color:#555}
+.emoji{font-size:26px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex:none;border-radius:12px;background:#f3efe6;overflow:hidden}
+.emoji img{width:100%;height:100%;object-fit:cover}
+.list .item{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.list .item:first-child{border-top:0}
+.iconbtn{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;background:#f3efe6;flex:none}
+.iconbtn.ok{background:var(--green-2)} .iconbtn.bad{background:var(--red-2)} .iconbtn.ice{background:var(--blue-2)}
+.seg{display:flex;gap:6px;margin:6px 12px;overflow-x:auto;scrollbar-width:none}
+.seg button{flex:none;padding:8px 14px;border-radius:999px;background:#ece6da;font-weight:600;font-size:14px;white-space:nowrap}
+.seg button.on{background:var(--green);color:#fff}
+.search{display:block;width:calc(100% - 24px);margin:8px 12px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px}
+.tile{background:#fff;border-radius:14px;padding:10px 4px;text-align:center;font-size:13px;line-height:1.2;box-shadow:0 1px 2px rgba(0,0,0,.05);min-height:78px}
+.tile b{display:block;font-size:28px;margin-bottom:4px;font-weight:normal}
+.tile:active{transform:scale(.96);background:var(--green-2)}
+.empty{text-align:center;padding:26px 16px;color:var(--muted)}
+.empty b{display:block;font-size:40px;margin-bottom:6px}
+/* barre d'onglets */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;padding-bottom:var(--safe-b);z-index:20}
+nav.tabs a{flex:1;text-align:center;text-decoration:none;color:var(--muted);font-size:11px;padding:8px 0 6px;font-weight:600}
+nav.tabs a span{display:block;font-size:22px;line-height:1.2}
+nav.tabs a.on{color:var(--green)}
+nav.tabs a.add span{background:var(--green);color:#fff;width:46px;height:46px;border-radius:50%;margin:-14px auto 0;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 3px 10px rgba(47,93,58,.35)}
+/* feuille du bas */
+.sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:40;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--bg);width:100%;max-width:640px;max-height:88vh;overflow:auto;border-radius:20px 20px 0 0;padding:8px 0 calc(20px + var(--safe-b));animation:up .18s ease-out}
+.sheet .grab{width:40px;height:5px;border-radius:3px;background:#d5cfc2;margin:4px auto 8px}
+.sheet h3{margin:6px 16px 10px;font-size:20px}
+@keyframes up{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+/* toast */
+#toast{position:fixed;left:12px;right:12px;bottom:calc(86px + var(--safe-b));z-index:60;display:none}
+#toast .in{background:#23261f;color:#fff;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px;max-width:520px;margin:auto;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+#toast button{color:#9fd3a8;font-weight:700}
+/* scanner */
+#scanner{position:fixed;inset:0;background:#000;z-index:50;display:none;flex-direction:column}
+#scanner video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#scanner .frame{position:absolute;left:10%;right:10%;top:30%;height:22%;border:3px solid rgba(255,255,255,.9);border-radius:16px;box-shadow:0 0 0 2000px rgba(0,0,0,.35)}
+#scanner .frame.hit{border-color:#7be08d}
+#scanner .top{position:relative;z-index:2;padding:calc(12px + var(--safe-t)) 14px 10px;color:#fff;display:flex;align-items:center;gap:10px}
+#scanner .bottom{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:12px 12px calc(16px + var(--safe-b));}
+#scanner .last{background:rgba(255,255,255,.96);border-radius:14px;padding:10px;margin-bottom:10px;min-height:60px}
+#scanner .count{background:rgba(0,0,0,.55);padding:6px 12px;border-radius:999px;font-weight:700}
+.nutri{display:inline-block;width:20px;height:20px;border-radius:5px;color:#fff;font-weight:800;font-size:13px;text-align:center;line-height:20px;text-transform:uppercase}
+.nutri.a{background:#038141}.nutri.b{background:#85bb2f}.nutri.c{background:#d8a400}.nutri.d{background:#ee8100}.nutri.e{background:#e63e11}
+label.check{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+label.check:first-child{border-top:0}
+label.check input{width:22px;height:22px;accent-color:var(--green);flex:none}
+.done{opacity:.5;text-decoration:line-through}
+.dayhead{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.3px}
+.recipe-title{font-size:18px;font-weight:700;margin:4px 0}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{padding:7px 11px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:14px}
+.chip.on{background:var(--green);border-color:var(--green);color:#fff}
+.field{margin:10px 0}
+.field > div:first-child{font-size:13px;color:var(--muted);margin-bottom:6px;font-weight:600}
+input[type=date],input[type=text],input[type=number],textarea{width:100%;padding:11px 12px;border-radius:12px;border:1px solid var(--line);background:#fff}
+.hidden{display:none!important}
+.warn{background:var(--amber-2);color:#5c3b00;border-radius:12px;padding:10px 12px;margin:10px 12px;font-size:14px}
+</style>
+</head>
+<body>
+<main id="view"></main>
+
+<nav class="tabs" id="tabs">
+  <a href="#priorite" data-v="priorite"><span>🍽️</span>À manger</a>
+  <a href="#stock" data-v="stock"><span>🧺</span>Stock</a>
+  <a href="#ajouter" data-v="ajouter" class="add"><span>＋</span>Ajouter</a>
+  <a href="#diners" data-v="diners"><span>📅</span>Dîners</a>
+  <a href="#courses" data-v="courses"><span>🛒</span>Courses</a>
+</nav>
+
+<div id="scanner">
+  <video id="video" playsinline muted autoplay></video>
+  <div class="frame" id="frame"></div>
+  <div class="top">
+    <button class="btn sm" id="scanClose" style="background:#fff;color:#000">Terminé</button>
+    <div class="grow"></div>
+    <div class="count" id="scanCount">0 ajouté</div>
+  </div>
+  <div class="bottom">
+    <div class="last" id="scanLast"><div class="muted">Vise le code-barres dans le cadre. Passe les produits les uns après les autres, je bipe à chaque fois.</div></div>
+    <form id="scanManual" class="row">
+      <input type="text" inputmode="numeric" pattern="[0-9]*" id="scanManualCode" placeholder="Ou tape les chiffres du code" style="flex:1">
+      <button class="btn primary" type="submit">OK</button>
+    </form>
+  </div>
+</div>
+
+<div id="toast"><div class="in"><div class="grow" id="toastMsg"></div><button id="toastUndo">Annuler</button></div></div>
+<input type="file" id="photoInput" accept="image/*" capture="environment" class="hidden">
+<input type="file" id="importFile" accept="application/json,.json" class="hidden">
+
+<script src="core.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
